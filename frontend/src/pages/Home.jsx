@@ -38,13 +38,13 @@ export default function Home() {
         </div>
         <div className="feature-card">
           <div className="feature-icon">✅</div>
-          <h3>Admin Review</h3>
-          <p>Expert admins review, approve, and rate every submitted idea.</p>
+          <h3>3-Admin Validation</h3>
+          <p>Ideas require approval from 3 independent admins before being validated.</p>
         </div>
         <div className="feature-card">
           <div className="feature-icon">⭐</div>
           <h3>Rating System</h3>
-          <p>Ideas are rated by multiple admins on a 1-5 star scale.</p>
+          <p>Validating admins rate each approved idea on a 1-5 star scale.</p>
         </div>
         <div className="feature-card">
           <div className="feature-icon">🏆</div>
@@ -52,9 +52,9 @@ export default function Home() {
           <p>Top rated ideas are displayed in a public leaderboard ranking.</p>
         </div>
         <div className="feature-card">
-          <div className="feature-icon">👥</div>
-          <h3>Collaborative</h3>
-          <p>Build a community of AI innovators and see who approved each idea.</p>
+          <div className="feature-icon">📧</div>
+          <h3>Auto Email Notifications</h3>
+          <p>Fully validated and rated ideas are automatically emailed with detailed reports.</p>
         </div>
       </div>
     </div>

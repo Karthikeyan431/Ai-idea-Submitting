@@ -15,6 +15,17 @@ class Settings(BaseSettings):
     SUPER_ADMIN_PASSWORD: str = "SuperAdmin@123"
     SUPER_ADMIN_NAME: str = "Super Admin"
 
+    # Number of admin approvals required to validate an idea
+    REQUIRED_APPROVALS: int = 3
+
+    # SMTP Email settings
+    SMTP_HOST: str = "smtp.gmail.com"
+    SMTP_PORT: int = 587
+    SMTP_USER: str = ""
+    SMTP_PASSWORD: str = ""
+    SMTP_FROM_NAME: str = "AI Idea Platform"
+    FRONTEND_BASE_URL: str = "http://localhost:5173"
+
     class Config:
         env_file = ".env"
 

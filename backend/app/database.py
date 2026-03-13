@@ -15,6 +15,7 @@ users_collection = db["users"]
 ideas_collection = db["ideas"]
 approvals_collection = db["approvals"]
 ratings_collection = db["ratings"]
+email_recipients_collection = db["email_recipients"]
 
 
 async def init_db():
@@ -25,6 +26,7 @@ async def init_db():
         await ideas_collection.create_index("approval_status")
         await approvals_collection.create_index([("idea_id", 1), ("admin_id", 1)], unique=True)
         await ratings_collection.create_index([("idea_id", 1), ("admin_id", 1)], unique=True)
+        await email_recipients_collection.create_index("email", unique=True)
         print("Database indexes created successfully")
     except Exception as e:
         print(f"Warning: Could not create indexes - {e}")

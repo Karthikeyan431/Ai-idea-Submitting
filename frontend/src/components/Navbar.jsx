@@ -27,7 +27,10 @@ export default function Navbar() {
           )}
 
           {isAdmin && (
-            <Link to="/admin" className={isActive('/admin')}>Admin</Link>
+            <>
+              <Link to="/admin" className={isActive('/admin')}>Admin</Link>
+              <Link to="/reports" className={isActive('/reports')}>Reports</Link>
+            </>
           )}
 
           {isSuperAdmin && (

@@ -53,11 +53,27 @@ export default function MyIdeas() {
                 </div>
               )}
 
+              {/* Validation progress */}
+              <div style={{ marginBottom: '0.75rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
+                  <span>Validation Progress</span>
+                  <span>{idea.approval_count}/{idea.required_approvals} approvals &middot; {idea.rating_count}/{idea.required_approvals} ratings</span>
+                </div>
+                <div style={{ background: 'var(--bg-input)', borderRadius: '4px', height: '5px', overflow: 'hidden' }}>
+                  <div style={{
+                    width: `${Math.min(100, ((idea.approval_count + idea.rating_count) / (idea.required_approvals * 2)) * 100)}%`,
+                    height: '100%',
+                    background: idea.is_fully_validated ? 'var(--success)' : 'var(--primary)',
+                    borderRadius: '4px',
+                  }} />
+                </div>
+              </div>
+
               {idea.average_rating != null && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
                   <StarRating rating={Math.round(idea.average_rating)} readonly />
                   <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-                    {idea.average_rating} avg
+                    {idea.average_rating} avg ({idea.rating_count} ratings)
                   </span>
                 </div>
               )}
@@ -70,6 +86,12 @@ export default function MyIdeas() {
                       {a.decision === 'approved' ? '✅' : '❌'} {a.admin_name}
                     </span>
                   ))}
+                </div>
+              )}
+
+              {idea.is_fully_validated && (
+                <div style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: 'var(--success)', fontWeight: 600 }}>
+                  ✅ Fully Validated & {idea.email_sent ? '📧 Notification Sent' : '⏳ Awaiting Email'}
                 </div>
               )}
             </div>

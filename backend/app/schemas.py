@@ -93,6 +93,11 @@ class IdeaOut(BaseModel):
     approvals: Optional[List[dict]] = []
     ratings: Optional[List[dict]] = []
     average_rating: Optional[float] = None
+    approval_count: int = 0
+    required_approvals: int = 3
+    rating_count: int = 0
+    is_fully_validated: bool = False
+    email_sent: bool = False
 
 
 class IdeaDuplicateWarning(BaseModel):
@@ -142,3 +147,24 @@ class IdeaRanking(BaseModel):
     average_rating: float
     total_ratings: int
     rank: int
+
+
+# ── Email Recipient Schemas ──
+
+class EmailRecipientCreate(BaseModel):
+    name: str = Field(..., min_length=1, max_length=100)
+    email: EmailStr
+
+
+class EmailRecipientOut(BaseModel):
+    id: str
+    name: str
+    email: str
+    added_by: str
+    added_at: datetime
+
+
+# ── Report Schemas ──
+
+class ReportEmailSendRequest(BaseModel):
+    recipient_ids: List[str] = Field(default_factory=list)

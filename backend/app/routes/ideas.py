@@ -35,6 +35,7 @@ async def enrich_idea(idea: dict) -> dict:
 
     # Get approvals
     approvals = []
+    approval_count = 0
     cursor = approvals_collection.find({"idea_id": idea_id})
     async for approval in cursor:
         approvals.append({
@@ -43,6 +44,8 @@ async def enrich_idea(idea: dict) -> dict:
             "decision": approval["decision"],
             "timestamp": approval["timestamp"].isoformat(),
         })
+        if approval["decision"] == "approved":
+            approval_count += 1
 
     # Get ratings
     ratings = []
@@ -58,6 +61,13 @@ async def enrich_idea(idea: dict) -> dict:
 
     avg_rating = round(total_rating / len(ratings), 2) if ratings else None
 
+    required = settings.REQUIRED_APPROVALS
+    is_fully_validated = (
+        approval_count >= required
+        and len(ratings) >= required
+        and idea["approval_status"] == "approved"
+    )
+
     return IdeaOut(
         id=idea_id,
         title=idea["title"],
@@ -72,6 +82,11 @@ async def enrich_idea(idea: dict) -> dict:
         approvals=approvals,
         ratings=ratings,
         average_rating=avg_rating,
+        approval_count=approval_count,
+        required_approvals=required,
+        rating_count=len(ratings),
+        is_fully_validated=is_fully_validated,
+        email_sent=idea.get("email_sent", False),
     )
 
 

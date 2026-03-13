@@ -11,6 +11,7 @@ import MyIdeas from './pages/MyIdeas';
 import Rankings from './pages/Rankings';
 import AdminDashboard from './pages/AdminDashboard';
 import SuperAdminPanel from './pages/SuperAdminPanel';
+import DetailedReport from './pages/DetailedReport';
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
@@ -48,6 +49,7 @@ function AppRoutes() {
           <Route path="/my-ideas" element={<ProtectedRoute><MyIdeas /></ProtectedRoute>} />
           <Route path="/rankings" element={<ProtectedRoute><Rankings /></ProtectedRoute>} />
           <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+          <Route path="/reports" element={<AdminRoute><DetailedReport /></AdminRoute>} />
           <Route path="/super-admin" element={<SuperAdminRoute><SuperAdminPanel /></SuperAdminRoute>} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

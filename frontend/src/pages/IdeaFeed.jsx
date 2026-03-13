@@ -54,6 +54,10 @@ export default function IdeaFeed() {
     return idea.approvals?.some((a) => a.admin_id === user?.id);
   };
 
+  const hasApproved = (idea) => {
+    return idea.approvals?.some((a) => a.admin_id === user?.id && a.decision === 'approved');
+  };
+
   const filtered = ideas.filter((idea) => {
     if (filter === 'all') return true;
     return idea.approval_status === filter;
@@ -126,11 +130,27 @@ export default function IdeaFeed() {
               )}
 
               <div className="idea-footer">
+                {/* Validation progress */}
+                <div style={{ width: '100%', marginBottom: '0.5rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
+                    <span>Validation</span>
+                    <span>{idea.approval_count}/{idea.required_approvals} approvals &middot; {idea.rating_count}/{idea.required_approvals} ratings</span>
+                  </div>
+                  <div style={{ background: 'var(--bg-input)', borderRadius: '4px', height: '4px', overflow: 'hidden' }}>
+                    <div style={{
+                      width: `${Math.min(100, ((idea.approval_count + idea.rating_count) / (idea.required_approvals * 2)) * 100)}%`,
+                      height: '100%',
+                      background: idea.is_fully_validated ? 'var(--success)' : 'var(--primary)',
+                      borderRadius: '4px',
+                    }} />
+                  </div>
+                </div>
+
                 {idea.average_rating != null && (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <StarRating rating={Math.round(idea.average_rating)} readonly />
                     <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-                      {idea.average_rating} ({idea.ratings?.length || 0} ratings)
+                      {idea.average_rating} ({idea.rating_count} ratings)
                     </span>
                   </div>
                 )}
@@ -147,6 +167,12 @@ export default function IdeaFeed() {
                     ))}
                   </div>
                 )}
+
+                {idea.is_fully_validated && (
+                  <span style={{ fontSize: '0.8rem', color: 'var(--success)', fontWeight: 600 }}>
+                    ✅ Fully Validated
+                  </span>
+                )}
               </div>
 
               {/* Admin actions */}
@@ -159,13 +185,16 @@ export default function IdeaFeed() {
                     </>
                   )}
                   {idea.approval_status === 'pending' && hasReviewed(idea) && (
-                    <span style={{ fontSize: '0.85rem', color: 'var(--success)' }}>✓ You have reviewed this idea</span>
+                    <span style={{ fontSize: '0.85rem', color: 'var(--success)' }}>✓ You have reviewed ({idea.approval_count}/{idea.required_approvals})</span>
                   )}
-                  {idea.approval_status === 'approved' && (
+                  {idea.approval_status === 'approved' && hasApproved(idea) && (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                       <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Your Rating:</span>
                       <StarRating rating={myRating(idea)} onRate={(rating) => handleRate(idea.id, rating)} />
                     </div>
+                  )}
+                  {idea.approval_status === 'approved' && !hasApproved(idea) && (
+                    <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Only approving admins can rate</span>
                   )}
                 </div>
               )}
